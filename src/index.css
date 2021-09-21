@@ -1,3 +1,88 @@
 html {
-  
+  background-color: rgb(119, 187, 153);
 }
+button {
+  border: none;
+}
+button:active {
+  transform: scale(0.98);
+}
+#main-container {
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  margin-top: 5vw;
+  width: 36vw;
+  height: 42vw;
+  border: 5px solid black;
+  border-radius: 5%;
+}
+#display {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: end;
+  background-color: rgb(221, 221, 221);
+  height: 8vw;
+  width: calc(35vw - 10px);
+  border: 5px solid black;
+  text-align: end;
+  font-size: 4vw;
+  margin-top: 1vw;
+  border-radius: 1vw;
+  padding: 5px;
+}
+#on-off-container {
+  width: 36vw;
+  height: 4vw;
+  text-align: end;
+  /* border: 2px solid red; */
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+#main-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 8vw);
+  /* border: 2px solid black; */
+  grid-template-rows: repeat(4, 6vw);
+  grid-gap: 1vw;
+}
+
+.number {
+  background-color: rgb(235, 106, 106);
+  border-radius: 8%;
+  border: 1.5px solid black;
+}
+.operation {
+  background-color: rgb(255, 166, 0);
+    border-radius: 8%;
+    border: 1.5px solid black;
+}
+.on-off {
+  height: 3vw;
+  width: 5vw;
+  margin: 10px;
+  border-radius: 10%;
+  border: 1.5px solid black;
+  box-shadow: 1px black;
+}
+
+#equals {
+    border-radius: 8%;
+    border: 1.5px solid black; 
+    background-color: white;
+}
+
+.number, .on-off, #equals, .operation {
+  font-weight: bold;
+  font-size: 2vw;
+}
+#clear {
+  font-size: 1.25vw;
+}
+
+
+
