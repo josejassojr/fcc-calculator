@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import evaluate from "./evaluate";
+import { set } from "immer/dist/internal";
 
 class Calculator extends Component {
   constructor(props) {
@@ -7,10 +8,12 @@ class Calculator extends Component {
 
     this.state = {
       display: "",
-      current: "0",
       on: false,
       operators: [],
-      operands: []
+      operands: [], 
+      negative: false,
+      eval: false,
+      decimal: false
     };
     this.handleClick = this.handleClick.bind(this);
     document.onkeypress = this.handleKeyPress;
@@ -20,52 +23,236 @@ class Calculator extends Component {
     if (x === "off") {
       this.setState({
         display: "",
-        current: "0",
         on: false,
         operators: [],
-        operands: []
+        operands: [],
+        negative: false,
+        eval: false
       });
-      const operands = ["-2.5", "3.243", "4","2"];     /* used for testing evaluate function in evaluate.js */
-      const operators = ["+","+","+"];
-      console.log("hello");
-      console.log(evaluate(operands, operators));
+      // const operands = ["-2.5", "3.243", "4","2"];     /* used for testing evaluate function in evaluate.js */
+      // const operators = ["+","+","+"];
+      // console.log("hello");
+      // console.log(evaluate(operands, operators));
       return;
     }
+    if (x === "AC") {
+      this.setState({
+        display: "0",
+        on: true,
+        operators: [],
+        operands: [],
+        negative: false,
+        eval: false
+      });
+      return;
+    }
+    if (!this.state.on) {
+      return;
+    }
+    // let dis = this.state.display.slice(); /* this is whats displayed when pressing the button */
+    // switch (x) {
+    //   case "1":
+    //   case "2":
+    //   case "3":
+    //   case "4":
+    //   case "5":
+    //   case "6":
+    //   case "7":
+    //   case "8":
+    //   case "9":
+    //   case "0":
+    //     if (dis === "0") {
+    //       this.setState({
+    //         display: x
+    //       })
+    //       return;
+    //     }
+    //     else {
+    //       switch (dis) {
+    //         case "x":
+    //         case "+":
+    //         case "÷":
+    //           this.setState({
+    //             operators: [...this.state.operators, dis],
+    //             display: x
+    //           })
+    //           return;
+    //         case "-":
+    //           if (this.setState.negative) {
+    //             this.setState({
+    //               negative : false,
+    //               display: "-".concat(x)
+    //             })
+    //           } else {
+    //             this.setState({
+    //               operators: [...this.state.operators, "-"],
+    //               display: x
+    //             })
+    //           }
+    //         default:
+    //           if (this.state.eval) {
+    //             this.setState({
+    //               display: x,
+    //               eval: false
+    //             })
+    //           } else {
+    //             this.setState({
+    //               display: dis.concat(x)
+    //             })
+    //           }
+    //       }
+    //     }
+    //   case "-":
+    //     switch (dis) {
+    //       case "x":
+    //       case "+":
+    //       case "÷":
+    //       case "-":
+    //         this.setState({
+    //           operators: [...this.state.operators, dis],
+    //           negative: true,
+    //           display: "-"
+    //         })
+    //         return;
+    //       case "0":
+    //         if (this.state.operands.length === 0) {
+    //           this.setState({
+    //             display: "-",
+    //             negative: true
+    //           })
+    //           return;
+    //         }
+    //       default:
+    //         if (this.state.eval) {
+    //           this.setState({
+    //             eval: false,
+    //             display: "-",
+    //             operands: [dis]
+    //           })
+    //         } else {
+    //           this.setState({
+    //             display: "-",
+    //             operands: [...this.state.operands, dis]
+    //           })
+    //         }
+    //         return;
+    //     }
+    //   case "x":
+    //   case "+":
+    //   case "÷":
+    //     switch (dis) {
+    //       case "x":
+    //       case "+":
+    //       case "÷":
+    //         this.setState({
+    //           display: x
+    //         })
+    //         return;
+    //       case "-":
+    //         if (this.state.negative) {
+    //           if (this.state.operators.length > 0) {
+    //             this.setState({
+    //               operators: this.state.operators.slice(0, -1),
+    //               display: x,
+    //               negative: false
+    //             })
+    //           } else {
+    //             this.setState({
+    //               display: x,
+    //               negative: false
+    //             })
+    //           }
+    //         } else {
+    //           this.setState({
+    //             display: x
+    //           })
+    //         }
+    //         return;
+    //       default:
+    //         if (this.state.eval) {
+    //           this.setState({
+    //             display: x,
+    //             eval: false,
+    //             operands: [dis]
+    //           })
+    //         } else {
+    //           this.setState({
+    //             display: x,
+    //             operands: [...this.state.operands, dis]
+    //           })
+    //         }
+    //         return;
+    //     }
+    //   case ".":
+    //     switch (dis) {
+    //       case "x":
+    //       case "+":
+    //       case "÷":
+    //         this.setState({
+    //           display: "0.",
+    //           decimal: true,
+    //           operators: [...this.state.operators, dis]
+    //         })
+    //         return;
+    //       case "-":
+    //         if (this.state.negative) {
+    //           this.setState({
+    //             display: "-0.",
+    //             decimal: true
+    //           })
+    //         } else {
+    //           this.setState({
+    //             display: "0.",
+    //             decimal: true,
+    //             operators: [...this.state.operators, dis]
+    //           })
+    //         }
+    //         return;
+    //       default:
+    //         if (this.state.eval) {
+    //           this.setState({
+    //             display: "0.",
+    //             eval: false,
+    //             operands: [dis]
+    //           })
+    //         } else {
+    //           if (this.state.decimal) {
+    //             return;
+    //           } else {
+    //             this.setState({
+    //               display: dis.concat("."),
+    //               decimal: true
+    //             })
+    //           }
+    //         }
+    //         return;
+    //     }
+    //   case "=":
+    //     switch (dis) {
+    //       case "x":
+    //       case "+":
+    //       case "-":
+    //       case "÷":
+    //         break;
+    //       default:
+    //         this.setState({
+    //           operands: [...this.state.operands, dis]
+    //         })
+    //         break;
+    //     }
+    //     var ret = evaluate(this.state.operands, this.state.operators);
+    //     this.setState({
+    //       display: ret,
+    //       operators: [],
+    //       operands: [],
+    //       negative: false,
+    //       eval: true,
+    //       decimal: false
+    //     })
+    //     return;
+    // }
   }
-  //   if (x === "AC") {
-  //     this.setState({
-  //       display: "0",
-  //       on: true,
-  //       current: "0",
-  //       operators: [],
-  //       operands: []
-  //     });
-  //     return;
-  //   }
-  //   if (!this.state.on) {
-  //     return;
-  //   }
-  //   var ret;
-  //   let dis = this.state.display.slice();
-  //   switch (x) {
-  //     case "1":
-  //     case "2":
-  //     case "3":
-  //     case "4":
-  //     case "5":
-  //     case "6":
-  //     case "7":
-  //     case "8":
-  //     case "9":
-  //       if (dis === "0") {
-  //         this.setState({
-  //           display: x
-  //         })
-  //         return;
-  //       // } else {
-  //       //   switch()
-  //       // }
-      
+
   //   }
   //   if (dis === "0") {
   //     switch (x) {
