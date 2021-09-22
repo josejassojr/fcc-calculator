@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import evaluate from './evaluate';
+import evaluate from "./evaluate";
 
 class Calculator extends Component {
   constructor(props) {
@@ -8,112 +8,142 @@ class Calculator extends Component {
     this.state = {
       display: "",
       current: "0",
-      on: false
+      on: false,
+      operators: [],
+      operands: []
     };
     this.handleClick = this.handleClick.bind(this);
     document.onkeypress = this.handleKeyPress;
   }
 
   handleClick(x) {
-    if (x  === "off") {
+    if (x === "off") {
       this.setState({
         display: "",
-        on: false
-      })
-      // const operands = ["-2.5","3.243","4"];      used for testing evaluate function in evaluate.js
-      // const operators = ["+","÷"];
-      // console.log(evaluate(operands, operators));
-      return;
-    }
-    if (x === "AC") {
-      this.setState({
-        display: "0",
-        on: true
-      })
-      return;
-    }
-    if (!this.state.on) {
-      return;
-    }
-    var ret;
-    let dis = this.state.display.slice();
-    if (dis === "0") {
-      switch (x) {
-        case "x":
-        case "=":
-        case "÷":
-        case "-":
-        case "+":
-          return;
-        case ".":
-          this.setState({
-            display: "0."
-          })
-          return;
-        default:
-          this.setState({
-            display: x
-          });
-          return;
-      }
-    } else {
-      switch (x) {
-        case "=":
-          ret = "=";
-          break;
-        case "0":
-          ret = "0";
-          break;
-        case "1":
-          ret = "1";
-          break;
-        case "2":
-          ret = "2";
-          break;
-        case "3":
-          ret = "3";
-          break;
-        case "4":
-          ret = "4";
-          break;
-        case "5":
-          ret = "5";
-          break;
-        case "6":
-          ret = "6";
-          break;
-        case "7":
-          ret = "7";
-          break;
-        case "8":
-          ret = "8";
-          break;
-        case "9":
-          ret = "9";
-          break;
-        case "+":
-          ret = "+";
-          break;
-        case "-":
-          ret = "-";
-          break;
-        case "x":
-          ret = "x";
-          break;
-        case "÷":
-          ret = "÷";
-          break;
-        case ".":
-          ret = ".";
-          break;
-        default:
-          return;
-      }
-      this.setState({
-        display: dis.concat(ret)
+        current: "0",
+        on: false,
+        operators: [],
+        operands: []
       });
+      const operands = ["-2.5", "3.243", "4","2"];     /* used for testing evaluate function in evaluate.js */
+      const operators = ["+","+","+"];
+      console.log("hello");
+      console.log(evaluate(operands, operators));
+      return;
     }
   }
+  //   if (x === "AC") {
+  //     this.setState({
+  //       display: "0",
+  //       on: true,
+  //       current: "0",
+  //       operators: [],
+  //       operands: []
+  //     });
+  //     return;
+  //   }
+  //   if (!this.state.on) {
+  //     return;
+  //   }
+  //   var ret;
+  //   let dis = this.state.display.slice();
+  //   switch (x) {
+  //     case "1":
+  //     case "2":
+  //     case "3":
+  //     case "4":
+  //     case "5":
+  //     case "6":
+  //     case "7":
+  //     case "8":
+  //     case "9":
+  //       if (dis === "0") {
+  //         this.setState({
+  //           display: x
+  //         })
+  //         return;
+  //       // } else {
+  //       //   switch()
+  //       // }
+      
+  //   }
+  //   if (dis === "0") {
+  //     switch (x) {
+  //       case "x":
+  //       case "=":
+  //       case "÷":
+  //       case "-":
+  //       case "+":
+  //         return;
+  //       case ".":
+  //         this.setState({
+  //           display: "0."
+  //         });
+  //         return;
+  //       default:
+  //         this.setState({
+  //           display: x
+  //         });
+  //         return;
+  //     }
+  //   } else {
+  //     switch (x) {
+  //       case "=":
+  //         ret = "=";
+  //         break;
+  //       case "0":
+  //         ret = "0";
+  //         break;
+  //       case "1":
+  //         ret = "1";
+  //         break;
+  //       case "2":
+  //         ret = "2";
+  //         break;
+  //       case "3":
+  //         ret = "3";
+  //         break;
+  //       case "4":
+  //         ret = "4";
+  //         break;
+  //       case "5":
+  //         ret = "5";
+  //         break;
+  //       case "6":
+  //         ret = "6";
+  //         break;
+  //       case "7":
+  //         ret = "7";
+  //         break;
+  //       case "8":
+  //         ret = "8";
+  //         break;
+  //       case "9":
+  //         ret = "9";
+  //         break;
+  //       case "+":
+  //         ret = "+";
+  //         break;
+  //       case "-":
+  //         ret = "-";
+  //         break;
+  //       case "x":
+  //         ret = "x";
+  //         break;
+  //       case "÷":
+  //         ret = "÷";
+  //         break;
+  //       case ".":
+  //         ret = ".";
+  //         break;
+  //       default:
+  //         return;
+  //     }
+  //     this.setState({
+  //       display: dis.concat(ret)
+  //     });
+  //   }
+  // }
 
   handleKeyPress(event) {
     let k = event.key;
@@ -183,7 +213,7 @@ class Calculator extends Component {
     return (
       <div className="App">
         <div id="main-container">
-          <display id="display">{this.state.display}</display>
+          <div id="display">{this.state.display}</div>
           <div id="on-off-container">
             <button
               className="on-off"
