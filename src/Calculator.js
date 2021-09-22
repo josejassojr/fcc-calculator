@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import evaluate from './evaluate';
 
 class Calculator extends Component {
   constructor(props) {
@@ -19,6 +20,9 @@ class Calculator extends Component {
         display: "",
         on: false
       })
+      // const operands = ["-2.5","3.243","4"];      used for testing evaluate function in evaluate.js
+      // const operators = ["+","÷"];
+      // console.log(evaluate(operands, operators));
       return;
     }
     if (x === "AC") {
@@ -33,7 +37,7 @@ class Calculator extends Component {
     }
     var ret;
     let dis = this.state.display.slice();
-    if (dis == "0") {
+    if (dis === "0") {
       switch (x) {
         case "x":
         case "=":
@@ -102,6 +106,8 @@ class Calculator extends Component {
         case ".":
           ret = ".";
           break;
+        default:
+          return;
       }
       this.setState({
         display: dis.concat(ret)
@@ -168,6 +174,8 @@ class Calculator extends Component {
       case " ":
         document.getElementById("clear").click();
         break;
+      default:
+        return;
     }
   }
 
