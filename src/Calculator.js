@@ -1,5 +1,5 @@
 import React from "react";
-import evaluate from './evaluate';
+import evaluate from "./evaluate";
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -55,12 +55,13 @@ class Calculator extends React.Component {
     console.log(this.state.display);
     var dis = this.state.display.slice();
     switch (x) {
-      // case that its an operator button clicked 
+      // case that its an operator button clicked
       case "x":
       case "+":
       case "÷":
       case "-":
-        if (x === "-") { /* minus sign check because you could be inputting the beginning of a negative number instead of subtracting */
+        if (x === "-") {
+          /* minus sign check because you could be inputting the beginning of a negative number instead of subtracting */
           switch (dis) {
             // means i am beginning a negative number so add operator to operator list and set display to '-'
             case "x":
@@ -71,30 +72,31 @@ class Calculator extends React.Component {
                 operators: [...this.state.operators, dis],
                 display: "-",
                 negative: true
-              })
+              });
               return;
             case "0":
               if (this.state.operands.length === 0) {
                 this.setState({
                   display: "-",
                   negative: true
-                })
+                });
                 return;
               }
             default:
               this.setState({
                 display: "-",
                 operands: [...this.state.operands, dis]
-              })
+              });
           }
-        } else { /* means i pressed any other operator button */
+        } else {
+          /* means i pressed any other operator button */
           switch (dis) {
             case "x":
             case "+":
             case "÷":
               this.setState({
                 display: x
-              })
+              });
               return;
             case "-":
               if (this.state.negative) {
@@ -103,18 +105,18 @@ class Calculator extends React.Component {
                     operators: this.state.operators.slice(0, -1),
                     display: x,
                     negative: false
-                  })
+                  });
                 } else {
                   this.setState({
-                    display:'0',
+                    display: "0",
                     negative: false
-                  })
+                  });
                 }
                 return;
               } else {
                 this.setState({
                   display: x
-                })
+                });
                 return;
               }
             case "0":
@@ -125,13 +127,45 @@ class Calculator extends React.Component {
               this.setState({
                 display: x,
                 operands: [...this.state.operands, dis]
-              })
+              });
               return;
           }
         }
-      default: /* pressed any digit */
-        
-        
+      default:
+        /* pressed any digit */
+        switch (dis) {
+          case "0":
+            this.setState({
+              display: x
+            });
+            console.log(this.state);
+            return;
+          case "x":
+          case "+":
+          case "÷":
+            this.setState({
+              operators: [...this.state.operators, dis],
+              display: x
+            });
+            console.log(this.state);
+            return;
+          case "-":
+            if (this.setState.negative) {
+              this.setState({
+                negative: false,
+                display: "-".concat(x)
+              });
+              console.log(this.state);
+              return;
+            } else {
+              this.setState({
+                operators: [...this.state.operators, "-"],
+                display: x
+              });
+              console.log(this.state);
+              return;
+            }
+        }
     }
 
     //   var ret;
