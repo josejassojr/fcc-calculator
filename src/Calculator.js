@@ -87,6 +87,7 @@ class Calculator extends React.Component {
                 display: "-",
                 operands: [...this.state.operands, dis]
               });
+              return;
           }
         } else {
           /* means i pressed any other operator button */
@@ -131,6 +132,44 @@ class Calculator extends React.Component {
               return;
           }
         }
+      case ".":
+        switch (dis) {
+          case "x":
+          case "+":
+          case "÷":
+            this.setState({
+              display: "0.",
+              decimal: true,
+              operators: [...this.state.operators, dis]
+            });
+            return;
+          case "-":
+            if (this.state.negative) {
+              this.setState({
+                display: "-0.",
+                decimal: true
+              });
+              return;
+            } else {
+              this.setState({
+                display: "0.",
+                decimal: true,
+                operators: [...this.state.operators, dis]
+              });
+              return;
+            }
+          default: /* a number is being currently displayed */
+            if (this.state.decimal) {
+              return;
+            } else {
+              this.setState({
+                display: dis.concat("."),
+                decimal: true
+              })
+              return;
+            }
+        }
+        
       default:
         /* pressed any digit */
         switch (dis) {
@@ -150,7 +189,7 @@ class Calculator extends React.Component {
             console.log(this.state);
             return;
           case "-":
-            if (this.setState.negative) {
+            if (this.state.negative) {
               this.setState({
                 negative: false,
                 display: "-".concat(x)
@@ -165,86 +204,14 @@ class Calculator extends React.Component {
               console.log(this.state);
               return;
             }
+          default:
+            this.setState({
+              display: dis.concat(x)
+            })
         }
     }
 
-    //   var ret;
-    //   let dis = this.state.display.slice();
-    //   if (dis == "0") {
-    //     switch (x) {
-    //       case "x":
-    //       case "=":
-    //       case "÷":
-    //       case "-":
-    //       case "+":
-    //         return;
-    //       case ".":
-    //         this.setState({
-    //           display: "0."
-    //         })
-    //         return;
-    //       default:
-    //         this.setState({
-    //           display: x
-    //         });
-    //         return;
-    //     }
-    //   } else {
-    //     switch (x) {
-    //       case "=":
-    //         ret = "=";
-    //         break;
-    //       case "0":
-    //         ret = "0";
-    //         break;
-    //       case "1":
-    //         ret = "1";
-    //         break;
-    //       case "2":
-    //         ret = "2";
-    //         break;
-    //       case "3":
-    //         ret = "3";
-    //         break;
-    //       case "4":
-    //         ret = "4";
-    //         break;
-    //       case "5":
-    //         ret = "5";
-    //         break;
-    //       case "6":
-    //         ret = "6";
-    //         break;
-    //       case "7":
-    //         ret = "7";
-    //         break;
-    //       case "8":
-    //         ret = "8";
-    //         break;
-    //       case "9":
-    //         ret = "9";
-    //         break;
-    //       case "+":
-    //         ret = "+";
-    //         break;
-    //       case "-":
-    //         ret = "-";
-    //         break;
-    //       case "x":
-    //         ret = "x";
-    //         break;
-    //       case "÷":
-    //         ret = "÷";
-    //         break;
-    //       case ".":
-    //         ret = ".";
-    //         break;
-    //     }
-    //     this.setState({
-    //       display: dis.concat(ret)
-    //     });
-    //   }
-    // }
+  
   }
 
   handleKeyPress(event) {
