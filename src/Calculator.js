@@ -2,8 +2,8 @@ import React from "react";
 import evaluate from "./evaluate";
 
 class Calculator extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       display: "",
@@ -26,13 +26,13 @@ class Calculator extends React.Component {
         operators: [],
         operands: [],
         negative: false,
-        eval: false
+        eval: false,
+        decimal: false
       });
-      // const operands = ["-2.5", "3.243", "4","2"];     /* used for testing evaluate function in evaluate.js */
-      // const operators = ["+","+","+"];
+      // const operands = ["1", "1", "1","1","1","1"];     /* used for testing evaluate function in evaluate.js */
+      // const operators = ["+","+","+","+","+"];
       // console.log("hello");
       // console.log(evaluate(operands, operators));
-      console.log(this.state);
 
       return;
     }
@@ -43,17 +43,30 @@ class Calculator extends React.Component {
         operators: [],
         operands: [],
         negative: false,
-        eval: false
+        eval: false,
+        decimal: false
       });
-      console.log(this.state);
+      // console.log(this.state);
       return;
     }
 
-    if (!this.state.on) {
+    let currOn = this.state.on;
+    if (!currOn) {
       return;
     }
-    console.log(this.state.display);
-    var dis = this.state.display.slice();
+    // console.log(this.state.display);
+    let dis = this.state.display;
+    let currOperators = this.state.operators;
+    let currOperands = this.state.operands;
+    let currNegative = this.state.negative;
+    let currDecimal = this.state.decimal;
+    console.log([
+      "display is: ".concat(dis),
+      "operators: ".concat(currOperators),
+      "operands: ".concat(currOperands),
+      "negative: ".concat(currNegative),
+      "decimal: ".concat(currDecimal)
+    ]);
     switch (x) {
       // case that its an operator button clicked
       case "x":
@@ -69,13 +82,13 @@ class Calculator extends React.Component {
             case "-":
             case "÷":
               this.setState({
-                operators: [...this.state.operators, dis],
+                operators: [...currOperators, dis],
                 display: "-",
                 negative: true
               });
               return;
             case "0":
-              if (this.state.operands.length === 0) {
+              if (currOperands.length === 0) {
                 this.setState({
                   display: "-",
                   negative: true
@@ -85,7 +98,7 @@ class Calculator extends React.Component {
             default:
               this.setState({
                 display: "-",
-                operands: [...this.state.operands, dis]
+                operands: [...currOperands, dis]
               });
               return;
           }
@@ -100,10 +113,10 @@ class Calculator extends React.Component {
               });
               return;
             case "-":
-              if (this.state.negative) {
-                if (this.state.operators.length > 0) {
+              if (currNegative) {
+                if (currOperators.length > 0) {
                   this.setState({
-                    operators: this.state.operators.slice(0, -1),
+                    operators: currOperators.slice(0, -1),
                     display: x,
                     negative: false
                   });
@@ -121,13 +134,13 @@ class Calculator extends React.Component {
                 return;
               }
             case "0":
-              if (this.state.operands.length === 0) {
+              if (currOperands.length === 0) {
                 return;
               }
             default:
               this.setState({
                 display: x,
-                operands: [...this.state.operands, dis]
+                operands: [...currOperands, dis]
               });
               return;
           }
@@ -140,11 +153,11 @@ class Calculator extends React.Component {
             this.setState({
               display: "0.",
               decimal: true,
-              operators: [...this.state.operators, dis]
+              operators: [...currOperators, dis]
             });
             return;
           case "-":
-            if (this.state.negative) {
+            if (currNegative) {
               this.setState({
                 display: "-0.",
                 decimal: true
@@ -154,13 +167,13 @@ class Calculator extends React.Component {
               this.setState({
                 display: "0.",
                 decimal: true,
-                operators: [...this.state.operators, dis]
+                operators: [...currOperators, dis]
               });
               return;
             }
           default:
             /* a number is being currently displayed */
-            if (this.state.decimal) {
+            if (currDecimal) {
               return;
             } else {
               this.setState({
@@ -179,17 +192,16 @@ class Calculator extends React.Component {
           case "÷":
             break;
           default:
-            this.setState(
-              {
-                operands: [...this.state.operands, dis]
-              },
-              () => {
-                console.log("hello");
-                console.log(this.state);
-              }
-            );
+            currOperands.push(dis);
         }
-        var ret = evaluate(this.state.operands, this.state.operators);
+
+        // console.log("hi");
+        // var operands = this.state.operands;
+        // var operators = this.state.operators;
+        // console.log(operands);
+        // console.log(operators);
+        var ret = evaluate(currOperands, currOperators);
+        // console.log(ret);
         this.setState({
           display: ret,
           operators: [],
@@ -205,33 +217,37 @@ class Calculator extends React.Component {
         switch (dis) {
           case "0":
             this.setState({
-              display: x
+              display: x,
+              decimal: false
             });
-            console.log(this.state);
+            // console.log(this.state);
             return;
           case "x":
           case "+":
           case "÷":
             this.setState({
-              operators: [...this.state.operators, dis],
-              display: x
+              operators: [...currOperators, dis],
+              display: x,
+              decimal: false
             });
-            console.log(this.state);
+            // console.log(this.state);
             return;
           case "-":
-            if (this.state.negative) {
+            if (currNegative) {
               this.setState({
                 negative: false,
-                display: "-".concat(x)
+                display: "-".concat(x),
+                decimal: false
               });
-              console.log(this.state);
+              // console.log(this.state);
               return;
             } else {
               this.setState({
-                operators: [...this.state.operators, "-"],
-                display: x
+                operators: [...currOperators, "-"],
+                display: x,
+                decimal: false
               });
-              console.log(this.state);
+              // console.log(this.state);
               return;
             }
           default:
