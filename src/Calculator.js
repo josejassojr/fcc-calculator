@@ -158,18 +158,48 @@ class Calculator extends React.Component {
               });
               return;
             }
-          default: /* a number is being currently displayed */
+          default:
+            /* a number is being currently displayed */
             if (this.state.decimal) {
               return;
             } else {
               this.setState({
                 display: dis.concat("."),
                 decimal: true
-              })
+              });
               return;
             }
         }
-        
+
+      case "=":
+        switch (dis) {
+          case "x":
+          case "+":
+          case "-":
+          case "÷":
+            break;
+          default:
+            this.setState(
+              {
+                operands: [...this.state.operands, dis]
+              },
+              () => {
+                console.log("hello");
+                console.log(this.state);
+              }
+            );
+        }
+        var ret = evaluate(this.state.operands, this.state.operators);
+        this.setState({
+          display: ret,
+          operators: [],
+          operands: [],
+          negative: false,
+          eval: true,
+          decimal: false
+        });
+        return;
+
       default:
         /* pressed any digit */
         switch (dis) {
@@ -207,11 +237,9 @@ class Calculator extends React.Component {
           default:
             this.setState({
               display: dis.concat(x)
-            })
+            });
         }
     }
-
-  
   }
 
   handleKeyPress(event) {
