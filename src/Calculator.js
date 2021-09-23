@@ -1,33 +1,54 @@
-import React, { Component } from "react";
+import React from "react";
+import evaluate from './evaluate';
 
-class Calculator extends Component {
+class Calculator extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       display: "",
-      current: "0",
-      on: false
+      on: false,
+      operators: [],
+      operands: [],
+      negative: false,
+      eval: false,
+      decimal: false
     };
     this.handleClick = this.handleClick.bind(this);
     document.onkeypress = this.handleKeyPress;
   }
 
   handleClick(x) {
-    if (x  === "off") {
+    if (x === "off") {
       this.setState({
         display: "",
-        on: false
-      })
+        on: false,
+        operators: [],
+        operands: [],
+        negative: false,
+        eval: false
+      });
+      // const operands = ["-2.5", "3.243", "4","2"];     /* used for testing evaluate function in evaluate.js */
+      // const operators = ["+","+","+"];
+      // console.log("hello");
+      // console.log(evaluate(operands, operators));
+      console.log(this.state);
+
       return;
     }
     if (x === "AC") {
       this.setState({
         display: "0",
-        on: true
-      })
+        on: true,
+        operators: [],
+        operands: [],
+        negative: false,
+        eval: false
+      });
+      console.log(this.state);
       return;
     }
+
     if (!this.state.on) {
       return;
     }
@@ -175,7 +196,7 @@ class Calculator extends Component {
     return (
       <div className="App">
         <div id="main-container">
-          <display id="display">{this.state.display}</display>
+          <div id="display">{this.state.display}</div>
           <div id="on-off-container">
             <button
               className="on-off"
