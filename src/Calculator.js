@@ -52,82 +52,165 @@ class Calculator extends React.Component {
     if (!this.state.on) {
       return;
     }
-    var ret;
-    let dis = this.state.display.slice();
-    if (dis == "0") {
-      switch (x) {
-        case "x":
-        case "=":
-        case "÷":
-        case "-":
-        case "+":
-          return;
-        case ".":
-          this.setState({
-            display: "0."
-          })
-          return;
-        default:
-          this.setState({
-            display: x
-          });
-          return;
-      }
-    } else {
-      switch (x) {
-        case "=":
-          ret = "=";
-          break;
-        case "0":
-          ret = "0";
-          break;
-        case "1":
-          ret = "1";
-          break;
-        case "2":
-          ret = "2";
-          break;
-        case "3":
-          ret = "3";
-          break;
-        case "4":
-          ret = "4";
-          break;
-        case "5":
-          ret = "5";
-          break;
-        case "6":
-          ret = "6";
-          break;
-        case "7":
-          ret = "7";
-          break;
-        case "8":
-          ret = "8";
-          break;
-        case "9":
-          ret = "9";
-          break;
-        case "+":
-          ret = "+";
-          break;
-        case "-":
-          ret = "-";
-          break;
-        case "x":
-          ret = "x";
-          break;
-        case "÷":
-          ret = "÷";
-          break;
-        case ".":
-          ret = ".";
-          break;
-      }
-      this.setState({
-        display: dis.concat(ret)
-      });
+    console.log(this.state.display);
+    var dis = this.state.display.slice();
+    switch (x) {
+      // case that its an operator button clicked 
+      case "x":
+      case "+":
+      case "÷":
+      case "-":
+        if (x === "-") { /* minus sign check because you could be inputting the beginning of a negative number instead of subtracting */
+          switch (dis) {
+            // means i am beginning a negative number so add operator to operator list and set display to '-'
+            case "x":
+            case "+":
+            case "-":
+            case "÷":
+              this.setState({
+                operators: [...this.state.operators, dis],
+                display: "-",
+                negative: true
+              })
+              return;
+            case "0":
+              if (this.state.operands.length === 0) {
+                this.setState({
+                  display: "-",
+                  negative: true
+                })
+                return;
+              }
+            default:
+              this.setState({
+                display: "-",
+                operands: [...this.state.operands, dis]
+              })
+          }
+        } else { /* means i pressed any other operator button */
+          switch (dis) {
+            case "x":
+            case "+":
+            case "÷":
+              this.setState({
+                display: x
+              })
+              return;
+            case "-":
+              if (this.state.negative) {
+                if (this.state.operators.length > 0) {
+                  this.setState({
+                    operators: this.state.operators.slice(0, -1),
+                    display: x,
+                    negative: false
+                  })
+                } else {
+                  this.setState({
+                    display:'0',
+                    negative: false
+                  })
+                }
+                return;
+              } else {
+                this.setState({
+                  display: x
+                })
+                return;
+              }
+            case "0":
+              if (this.state.operands.length === 0) {
+                return;
+              }
+            default:
+              this.setState({
+                display: x,
+                operands: [...this.state.operands, dis]
+              })
+              return;
+          }
+        }
+      default: /* pressed any digit */
+        
+        
     }
+
+    //   var ret;
+    //   let dis = this.state.display.slice();
+    //   if (dis == "0") {
+    //     switch (x) {
+    //       case "x":
+    //       case "=":
+    //       case "÷":
+    //       case "-":
+    //       case "+":
+    //         return;
+    //       case ".":
+    //         this.setState({
+    //           display: "0."
+    //         })
+    //         return;
+    //       default:
+    //         this.setState({
+    //           display: x
+    //         });
+    //         return;
+    //     }
+    //   } else {
+    //     switch (x) {
+    //       case "=":
+    //         ret = "=";
+    //         break;
+    //       case "0":
+    //         ret = "0";
+    //         break;
+    //       case "1":
+    //         ret = "1";
+    //         break;
+    //       case "2":
+    //         ret = "2";
+    //         break;
+    //       case "3":
+    //         ret = "3";
+    //         break;
+    //       case "4":
+    //         ret = "4";
+    //         break;
+    //       case "5":
+    //         ret = "5";
+    //         break;
+    //       case "6":
+    //         ret = "6";
+    //         break;
+    //       case "7":
+    //         ret = "7";
+    //         break;
+    //       case "8":
+    //         ret = "8";
+    //         break;
+    //       case "9":
+    //         ret = "9";
+    //         break;
+    //       case "+":
+    //         ret = "+";
+    //         break;
+    //       case "-":
+    //         ret = "-";
+    //         break;
+    //       case "x":
+    //         ret = "x";
+    //         break;
+    //       case "÷":
+    //         ret = "÷";
+    //         break;
+    //       case ".":
+    //         ret = ".";
+    //         break;
+    //     }
+    //     this.setState({
+    //       display: dis.concat(ret)
+    //     });
+    //   }
+    // }
   }
 
   handleKeyPress(event) {
