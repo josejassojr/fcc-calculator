@@ -60,12 +60,14 @@ class Calculator extends React.Component {
     let currOperands = this.state.operands;
     let currNegative = this.state.negative;
     let currDecimal = this.state.decimal;
+    let currEval = this.state.eval;
     console.log([
       "display is: ".concat(dis),
       "operators: ".concat(currOperators),
       "operands: ".concat(currOperands),
       "negative: ".concat(currNegative),
-      "decimal: ".concat(currDecimal)
+      "decimal: ".concat(currDecimal),
+      "eval: ".concat(currEval)
     ]);
     switch (x) {
       // case that its an operator button clicked
@@ -91,16 +93,18 @@ class Calculator extends React.Component {
               if (currOperands.length === 0) {
                 this.setState({
                   display: "-",
-                  negative: true
+                  negative: true,
+                  eval: false
                 });
                 return;
               }
             default:
-              this.setState({
-                display: "-",
-                operands: [...currOperands, dis]
-              });
-              return;
+                this.setState({
+                  display: "-",
+                  operands: [...currOperands, dis],
+                  eval: false
+                });
+                return;
           }
         } else {
           /* means i pressed any other operator button */
@@ -140,7 +144,8 @@ class Calculator extends React.Component {
             default:
               this.setState({
                 display: x,
-                operands: [...currOperands, dis]
+                operands: [...currOperands, dis],
+                eval: false
               });
               return;
           }
@@ -173,14 +178,22 @@ class Calculator extends React.Component {
             }
           default:
             /* a number is being currently displayed */
-            if (currDecimal) {
-              return;
-            } else {
+            if (currEval) {
               this.setState({
-                display: dis.concat("."),
-                decimal: true
+                display: "0.",
+                eval: false
               });
               return;
+            } else {
+              if (currDecimal) {
+                return;
+              } else {
+                this.setState({
+                  display: dis.concat("."),
+                  decimal: true
+                });
+                return;
+              }
             }
         }
 
@@ -202,14 +215,17 @@ class Calculator extends React.Component {
         // console.log(operators);
         var ret = evaluate(currOperands, currOperators);
         // console.log(ret);
-        this.setState({
-          display: ret,
-          operators: [],
-          operands: [],
-          negative: false,
-          eval: true,
-          decimal: false
-        });
+        this.setState(
+          {
+            display: ret,
+            operators: [],
+            operands: [],
+            negative: false,
+            eval: true,
+            decimal: false
+          },
+          () => console.log(this.state)
+        );
         return;
 
       default:
@@ -251,9 +267,17 @@ class Calculator extends React.Component {
               return;
             }
           default:
-            this.setState({
-              display: dis.concat(x)
-            });
+            if (currEval) {
+              this.setState({
+                display: x,
+                eval: false
+              });
+              return;
+            } else {
+              this.setState({
+                display: dis.concat(x)
+              });
+            }
         }
     }
   }
