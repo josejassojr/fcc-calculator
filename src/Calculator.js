@@ -1,111 +1,290 @@
-import React, { Component } from "react";
+import React from "react";
+import evaluate from "./evaluate";
 
-class Calculator extends Component {
-  constructor(props) {
-    super(props);
+class Calculator extends React.Component {
+  constructor() {
+    super();
 
     this.state = {
       display: "",
-      current: "0",
-      on: false
+      on: false,
+      operators: [],
+      operands: [],
+      negative: false,
+      eval: false,
+      decimal: false
     };
     this.handleClick = this.handleClick.bind(this);
     document.onkeypress = this.handleKeyPress;
   }
 
   handleClick(x) {
-    if (x  === "off") {
+    if (x === "off") {
       this.setState({
         display: "",
-        on: false
-      })
+        on: false,
+        operators: [],
+        operands: [],
+        negative: false,
+        eval: false,
+        decimal: false
+      });
+      // const operands = ["1", "1", "1","1","1","1"];     /* used for testing evaluate function in evaluate.js */
+      // const operators = ["+","+","+","+","+"];
+      // console.log("hello");
+      // console.log(evaluate(operands, operators));
+
       return;
     }
     if (x === "AC") {
       this.setState({
         display: "0",
-        on: true
-      })
-      return;
-    }
-    if (!this.state.on) {
-      return;
-    }
-    var ret;
-    let dis = this.state.display.slice();
-    if (dis == "0") {
-      switch (x) {
-        case "x":
-        case "=":
-        case "÷":
-        case "-":
-        case "+":
-          return;
-        case ".":
-          this.setState({
-            display: "0."
-          })
-          return;
-        default:
-          this.setState({
-            display: x
-          });
-          return;
-      }
-    } else {
-      switch (x) {
-        case "=":
-          ret = "=";
-          break;
-        case "0":
-          ret = "0";
-          break;
-        case "1":
-          ret = "1";
-          break;
-        case "2":
-          ret = "2";
-          break;
-        case "3":
-          ret = "3";
-          break;
-        case "4":
-          ret = "4";
-          break;
-        case "5":
-          ret = "5";
-          break;
-        case "6":
-          ret = "6";
-          break;
-        case "7":
-          ret = "7";
-          break;
-        case "8":
-          ret = "8";
-          break;
-        case "9":
-          ret = "9";
-          break;
-        case "+":
-          ret = "+";
-          break;
-        case "-":
-          ret = "-";
-          break;
-        case "x":
-          ret = "x";
-          break;
-        case "÷":
-          ret = "÷";
-          break;
-        case ".":
-          ret = ".";
-          break;
-      }
-      this.setState({
-        display: dis.concat(ret)
+        on: true,
+        operators: [],
+        operands: [],
+        negative: false,
+        eval: false,
+        decimal: false
       });
+      // console.log(this.state);
+      return;
+    }
+
+    let currOn = this.state.on;
+    if (!currOn) {
+      return;
+    }
+    // console.log(this.state.display);
+    let dis = this.state.display;
+    let currOperators = this.state.operators;
+    let currOperands = this.state.operands;
+    let currNegative = this.state.negative;
+    let currDecimal = this.state.decimal;
+    let currEval = this.state.eval;
+    console.log([
+      "display is: ".concat(dis),
+      "operators: ".concat(currOperators),
+      "operands: ".concat(currOperands),
+      "negative: ".concat(currNegative),
+      "decimal: ".concat(currDecimal),
+      "eval: ".concat(currEval)
+    ]);
+    if (dis === "TOO LARGE") {
+      return;
+    }
+    switch (x) {
+      // case that its an operator button clicked
+      case "x":
+      case "+":
+      case "÷":
+      case "-":
+        if (x === "-") {
+          /* minus sign check because you could be inputting the beginning of a negative number instead of subtracting */
+          switch (dis) {
+            // means i am beginning a negative number so add operator to operator list and set display to '-'
+            case "x":
+            case "+":
+            case "-":
+            case "÷":
+              this.setState({
+                operators: [...currOperators, dis],
+                display: "-",
+                negative: true
+              });
+              return;
+            case "0":
+              if (currOperands.length === 0) {
+                this.setState({
+                  display: "-",
+                  negative: true,
+                  eval: false
+                });
+                return;
+              }
+            default:
+                this.setState({
+                  display: "-",
+                  operands: [...currOperands, dis],
+                  eval: false
+                });
+                return;
+          }
+        } else {
+          /* means i pressed any other operator button */
+          switch (dis) {
+            case "x":
+            case "+":
+            case "÷":
+              this.setState({
+                display: x
+              });
+              return;
+            case "-":
+              if (currNegative) {
+                if (currOperators.length > 0) {
+                  this.setState({
+                    operators: currOperators.slice(0, -1),
+                    display: x,
+                    negative: false
+                  });
+                } else {
+                  this.setState({
+                    display: "0",
+                    negative: false
+                  });
+                }
+                return;
+              } else {
+                this.setState({
+                  display: x
+                });
+                return;
+              }
+            case "0":
+              if (currOperands.length === 0) {
+                return;
+              }
+            default:
+              this.setState({
+                display: x,
+                operands: [...currOperands, dis],
+                eval: false
+              });
+              return;
+          }
+        }
+      case ".":
+        switch (dis) {
+          case "x":
+          case "+":
+          case "÷":
+            this.setState({
+              display: "0.",
+              decimal: true,
+              operators: [...currOperators, dis]
+            });
+            return;
+          case "-":
+            if (currNegative) {
+              this.setState({
+                display: "-0.",
+                decimal: true
+              });
+              return;
+            } else {
+              this.setState({
+                display: "0.",
+                decimal: true,
+                operators: [...currOperators, dis]
+              });
+              return;
+            }
+          default:
+            /* a number is being currently displayed */
+            if (currEval) {
+              this.setState({
+                display: "0.",
+                eval: false
+              });
+              return;
+            } else {
+              if (currDecimal) {
+                return;
+              } else {
+                this.setState({
+                  display: dis.concat("."),
+                  decimal: true
+                });
+                return;
+              }
+            }
+        }
+
+      case "=":
+        switch (dis) {
+          case "x":
+          case "+":
+          case "-":
+          case "÷":
+            break;
+          default:
+            currOperands.push(dis);
+        }
+
+        // console.log("hi");
+        // var operands = this.state.operands;
+        // var operators = this.state.operators;
+        // console.log(operands);
+        // console.log(operators);
+        var ret = evaluate(currOperands, currOperators);
+        // console.log(ret);
+        this.setState(
+          {
+            display: ret,
+            operators: [],
+            operands: [],
+            negative: false,
+            eval: true,
+            decimal: false
+          },
+          () => console.log(this.state)
+        );
+        return;
+
+      default:
+        /* pressed any digit */
+        switch (dis) {
+          case "0":
+            this.setState({
+              display: x,
+              decimal: false
+            });
+            // console.log(this.state);
+            return;
+          case "x":
+          case "+":
+          case "÷":
+            this.setState({
+              operators: [...currOperators, dis],
+              display: x,
+              decimal: false
+            });
+            // console.log(this.state);
+            return;
+          case "-":
+            if (currNegative) {
+              this.setState({
+                negative: false,
+                display: "-".concat(x),
+                decimal: false
+              });
+              // console.log(this.state);
+              return;
+            } else {
+              this.setState({
+                operators: [...currOperators, "-"],
+                display: x,
+                decimal: false
+              });
+              // console.log(this.state);
+              return;
+            }
+          default:
+            if (currEval) {
+              this.setState({
+                display: x,
+                eval: false
+              });
+              return;
+            } else {
+              if (dis.length >= 16) {
+                return;
+              }
+              this.setState({
+                display: dis.concat(x)
+              });
+            }
+        }
     }
   }
 
@@ -175,7 +354,7 @@ class Calculator extends Component {
     return (
       <div className="App">
         <div id="main-container">
-          <display id="display">{this.state.display}</display>
+          <div id="display">{this.state.display}</div>
           <div id="on-off-container">
             <button
               className="on-off"

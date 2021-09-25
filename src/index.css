@@ -2,6 +2,7 @@ html {
   background-color: rgb(119, 187, 153);
 }
 button {
+  color: black;
   border: none;
 }
 button:active {
@@ -16,18 +17,18 @@ button:active {
   margin-top: 5vw;
   width: 36vw;
   height: 42vw;
-  border: 5px solid black;
+  border: .5vw solid black;
   border-radius: 5%;
 }
 #display {
   display: flex;
   flex-direction: column;
-  align-items: end;
-  justify-content: end;
+  align-items: flex-end;
+  justify-content: flex-end;
   background-color: rgb(221, 221, 221);
   height: 8vw;
   width: calc(35vw - 10px);
-  border: 5px solid black;
+  border: .5vw solid black;
   text-align: end;
   font-size: 4vw;
   margin-top: 1vw;
@@ -40,7 +41,7 @@ button:active {
   text-align: end;
   /* border: 2px solid red; */
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
 }
 #main-grid {
@@ -54,25 +55,26 @@ button:active {
 .number {
   background-color: rgb(235, 106, 106);
   border-radius: 8%;
-  border: 1.5px solid black;
+  border: .15vw solid black;
 }
 .operation {
   background-color: rgb(255, 166, 0);
     border-radius: 8%;
-    border: 1.5px solid black;
+    border: .15vw solid black;
 }
 .on-off {
   height: 3vw;
   width: 5vw;
   margin: 10px;
   border-radius: 10%;
-  border: 1.5px solid black;
+  border: .15vw solid black;
   box-shadow: 1px black;
+  background-color: white;
 }
 
 #equals {
     border-radius: 8%;
-    border: 1.5px solid black; 
+    border: .15vw solid black; 
     background-color: white;
 }
 
@@ -84,5 +86,46 @@ button:active {
   font-size: 1.25vw;
 }
 
+@media (max-width: 800px) {
+#main-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 7.75vw);
+  /* border: 2px solid black; */
+  grid-template-rows: repeat(4, 5.75vw);
+  grid-gap: .75vw;
+}
 
+.number {
+  background-color: rgb(235, 106, 106);
+  border-radius: 8%;
+  border: .15vw solid black;
+}
+.operation {
+  background-color: rgb(255, 166, 0);
+    border-radius: 8%;
+    border: .15vw solid black;
+}
+.on-off {
+  height: 3vw;
+  width: 5vw;
+  margin: 1vw;
+  border-radius: 10%;
+  border: .15vw solid black;
+  box-shadow: 1px black;
+  background-color: white;
+}
+
+#equals {
+    border-radius: 8%;
+    border: .15vw solid black; 
+    background-color: white;
+}
+
+#clear {
+  font-size: 1vw;
+}
+#off {
+  font-size: 1.5vw;
+}
+}
 
