@@ -69,6 +69,9 @@ class Calculator extends React.Component {
       "decimal: ".concat(currDecimal),
       "eval: ".concat(currEval)
     ]);
+    if (dis === "TOO LARGE") {
+      return;
+    }
     switch (x) {
       // case that its an operator button clicked
       case "x":
@@ -274,6 +277,9 @@ class Calculator extends React.Component {
               });
               return;
             } else {
+              if (dis.length >= 16) {
+                return;
+              }
               this.setState({
                 display: dis.concat(x)
               });

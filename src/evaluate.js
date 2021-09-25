@@ -5,13 +5,13 @@ const evaluate = (operands, operators) => {
     var operator = operators[0];
     switch (operator) {
       case "x":
-        return firstOperand * secOperand;
+        return roundEval(firstOperand * secOperand);
       case "+":
-        return firstOperand + secOperand;
+        return roundEval(firstOperand + secOperand);
       case "-":
-        return firstOperand - secOperand;
+        return roundEval(firstOperand - secOperand);
       case "÷":
-        return firstOperand / secOperand;
+        return roundEval(firstOperand / secOperand);
       default:
         return;
     }
@@ -35,13 +35,13 @@ const evaluate = (operands, operators) => {
         }
         switch (secOperator) {
           case "x":
-            return temp * thirdOperand;
+            return roundEval(temp * thirdOperand);
           case "+":
-            return temp + thirdOperand;
+            return roundEval(temp + thirdOperand);
           case "÷":
-            return temp / thirdOperand;
+            return roundEval(temp / thirdOperand);
           case "-":
-            return temp - thirdOperand;
+            return roundEval(temp - thirdOperand);
           default:
             return;
         }
@@ -54,11 +54,11 @@ const evaluate = (operands, operators) => {
             } else {
               var temp = secOperand / thirdOperand;
             }
-            return firstOperand - temp;
+            return roundEval(firstOperand - temp);
           case "+":
-            return firstOperand - secOperand + thirdOperand;
+            return roundEval(firstOperand - secOperand + thirdOperand);
           default:
-            return firstOperand - secOperand - thirdOperand;
+            return roundEval(firstOperand - secOperand - thirdOperand);
         }
       case "+":
         switch (secOperator) {
@@ -80,11 +80,11 @@ const evaluate = (operands, operators) => {
         }
         switch (firstOperator) {
           case "+":
-            return firstOperand + temp;
+            return roundEval(firstOperand + temp);
           case "-":
-            return firstOperand - temp;
+            return roundEval(firstOperand - temp);
           default:
-            return temp;
+            return roundEval(temp);
         }
       default:
         return -1;
@@ -112,13 +112,13 @@ const evaluate = (operands, operators) => {
       }
     }
     if (operators.length === 0) {
-      return operands[0];
+      return roundEval(operands[0]);
     }
     if (operators.length === 1) {
       if (operators[0] === "+") {
-        return Number(operands[0]) + Number(operands[1]);
+        return roundEval(Number(operands[0]) + Number(operands[1]));
       } else {
-        return Number(operands[0]) - Number(operands[1]);
+        return roundEval(Number(operands[0]) - Number(operands[1]));
       }
     } else {
       return evalImmediate(operands, operators);
@@ -150,6 +150,24 @@ function evalImmediate(operands, operators) {
       ret -= num;
     }
   }
-  return ret;
+  return roundEval(ret);
+}
+
+function roundEval(x) {
+  let strEval = String(x);
+  let ret;
+  if (strEval.length > 16) { 
+    let parts = strEval.split(".");
+    if (parts.length == 2) {
+      let round = 16 - parts[0].length;
+      // Math.round((num + Number.EPSILON) * 100) / 100;
+      ret = Math.round((x + Number.EPSILON) * (10 ** round)) / (10 ** round);
+      return ret
+    } else { /* means that eval is greater than 16 and yet the answer is too long. Need to return answer too big and start over */
+      return "TOO LARGE";
+    }
+  } else {
+    return x;
+  }
 }
 export default evaluate;
