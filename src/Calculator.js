@@ -101,13 +101,14 @@ class Calculator extends React.Component {
                 });
                 return;
               }
+              break;
             default:
-                this.setState({
-                  display: "-",
-                  operands: [...currOperands, dis],
-                  eval: false
-                });
-                return;
+              this.setState({
+                display: "-",
+                operands: [...currOperands, dis],
+                eval: false
+              });
+              return;
           }
         } else {
           /* means i pressed any other operator button */
@@ -144,6 +145,7 @@ class Calculator extends React.Component {
               if (currOperands.length === 0) {
                 return;
               }
+              break;
             default:
               this.setState({
                 display: x,
@@ -153,6 +155,7 @@ class Calculator extends React.Component {
               return;
           }
         }
+        break;
       case ".":
         switch (dis) {
           case "x":
@@ -347,6 +350,8 @@ class Calculator extends React.Component {
       case " ":
         document.getElementById("clear").click();
         break;
+      default:
+        return;
     }
   }
 
