@@ -1,5 +1,6 @@
 import React from "react";
 import evaluate from "./evaluate";
+import Footer from "./Footer";
 
 class Calculator extends React.Component {
   constructor() {
@@ -12,7 +13,7 @@ class Calculator extends React.Component {
       operands: [],
       negative: false,
       eval: false,
-      decimal: false
+      decimal: false,
     };
     this.handleClick = this.handleClick.bind(this);
     document.onkeypress = this.handleKeyPress;
@@ -27,7 +28,7 @@ class Calculator extends React.Component {
         operands: [],
         negative: false,
         eval: false,
-        decimal: false
+        decimal: false,
       });
       // const operands = ["1", "1", "1","1","1","1"];     /* used for testing evaluate function in evaluate.js */
       // const operators = ["+","+","+","+","+"];
@@ -44,7 +45,7 @@ class Calculator extends React.Component {
         operands: [],
         negative: false,
         eval: false,
-        decimal: false
+        decimal: false,
       });
       // console.log(this.state);
       return;
@@ -67,7 +68,7 @@ class Calculator extends React.Component {
       "operands: ".concat(currOperands),
       "negative: ".concat(currNegative),
       "decimal: ".concat(currDecimal),
-      "eval: ".concat(currEval)
+      "eval: ".concat(currEval),
     ]);
     if (dis === "TOO LARGE") {
       return;
@@ -89,7 +90,7 @@ class Calculator extends React.Component {
               this.setState({
                 operators: [...currOperators, dis],
                 display: "-",
-                negative: true
+                negative: true,
               });
               return;
             case "0":
@@ -97,7 +98,7 @@ class Calculator extends React.Component {
                 this.setState({
                   display: "-",
                   negative: true,
-                  eval: false
+                  eval: false,
                 });
                 return;
               }
@@ -106,7 +107,7 @@ class Calculator extends React.Component {
               this.setState({
                 display: "-",
                 operands: [...currOperands, dis],
-                eval: false
+                eval: false,
               });
               return;
           }
@@ -117,7 +118,7 @@ class Calculator extends React.Component {
             case "+":
             case "÷":
               this.setState({
-                display: x
+                display: x,
               });
               return;
             case "-":
@@ -126,18 +127,18 @@ class Calculator extends React.Component {
                   this.setState({
                     operators: currOperators.slice(0, -1),
                     display: x,
-                    negative: false
+                    negative: false,
                   });
                 } else {
                   this.setState({
                     display: "0",
-                    negative: false
+                    negative: false,
                   });
                 }
                 return;
               } else {
                 this.setState({
-                  display: x
+                  display: x,
                 });
                 return;
               }
@@ -150,7 +151,7 @@ class Calculator extends React.Component {
               this.setState({
                 display: x,
                 operands: [...currOperands, dis],
-                eval: false
+                eval: false,
               });
               return;
           }
@@ -164,21 +165,21 @@ class Calculator extends React.Component {
             this.setState({
               display: "0.",
               decimal: true,
-              operators: [...currOperators, dis]
+              operators: [...currOperators, dis],
             });
             return;
           case "-":
             if (currNegative) {
               this.setState({
                 display: "-0.",
-                decimal: true
+                decimal: true,
               });
               return;
             } else {
               this.setState({
                 display: "0.",
                 decimal: true,
-                operators: [...currOperators, dis]
+                operators: [...currOperators, dis],
               });
               return;
             }
@@ -187,7 +188,7 @@ class Calculator extends React.Component {
             if (currEval) {
               this.setState({
                 display: "0.",
-                eval: false
+                eval: false,
               });
               return;
             } else {
@@ -196,7 +197,7 @@ class Calculator extends React.Component {
               } else {
                 this.setState({
                   display: dis.concat("."),
-                  decimal: true
+                  decimal: true,
                 });
                 return;
               }
@@ -228,7 +229,7 @@ class Calculator extends React.Component {
             operands: [],
             negative: false,
             eval: true,
-            decimal: false
+            decimal: false,
           },
           () => console.log(this.state)
         );
@@ -240,7 +241,7 @@ class Calculator extends React.Component {
           case "0":
             this.setState({
               display: x,
-              decimal: false
+              decimal: false,
             });
             // console.log(this.state);
             return;
@@ -250,7 +251,7 @@ class Calculator extends React.Component {
             this.setState({
               operators: [...currOperators, dis],
               display: x,
-              decimal: false
+              decimal: false,
             });
             // console.log(this.state);
             return;
@@ -259,7 +260,7 @@ class Calculator extends React.Component {
               this.setState({
                 negative: false,
                 display: "-".concat(x),
-                decimal: false
+                decimal: false,
               });
               // console.log(this.state);
               return;
@@ -267,7 +268,7 @@ class Calculator extends React.Component {
               this.setState({
                 operators: [...currOperators, "-"],
                 display: x,
-                decimal: false
+                decimal: false,
               });
               // console.log(this.state);
               return;
@@ -276,7 +277,7 @@ class Calculator extends React.Component {
             if (currEval) {
               this.setState({
                 display: x,
-                eval: false
+                eval: false,
               });
               return;
             } else {
@@ -284,7 +285,7 @@ class Calculator extends React.Component {
                 return;
               }
               this.setState({
-                display: dis.concat(x)
+                display: dis.concat(x),
               });
             }
         }
@@ -487,6 +488,7 @@ class Calculator extends React.Component {
             </button>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
